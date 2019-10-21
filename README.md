@@ -10,6 +10,7 @@ driver:
 	add test_driver
 	add backlight
 	add lcd
+	add led
 	
 
 busybox:
