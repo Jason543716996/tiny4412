@@ -7,6 +7,10 @@ kernel:
 	adapter EMMC "配置从EMMC中启动系统"
 
 
+driver:
+	add test_driver
+	
 
 busybox:
 	add rootfs.tar.gz
+

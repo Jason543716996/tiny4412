@@ -1,0 +1,72 @@
+
+内核已经实现了platform总线，我们只需了解总线所管理匹配的设备和驱动
+对象及匹配规则，就可方便的来管理我们的设备对象和驱动对象。
+
+1. 涉及的头文件
+
+#include <linux/platform_device.h>
+
+
+2. 了解platform总线的match规则及管理匹配的设备和驱动对象的类型
+
+内核源码，只需了解即可。
+
+struct bus_type platform_bus_type = {
+	.name		= "platform",
+	.dev_attrs	= platform_dev_attrs,
+	.match		= platform_match,
+	.uevent		= platform_uevent,
+	.pm		= &platform_dev_pm_ops,
+};
+
+static int platform_match(struct device *dev, struct device_driver *drv)
+{
+	struct platform_device *pdev = to_platform_device(dev);
+	struct platform_driver *pdrv = to_platform_driver(drv);
+
+	/* Attempt an OF style match first */
+	if (of_driver_match_device(dev, drv))
+		return 1;
+
+	/* Then try to match against the id table */
+	if (pdrv->id_table)
+		return platform_match_id(pdrv->id_table, pdev) != NULL;
+
+	/* fall-back to driver name match */
+	return (strcmp(pdev->name, drv->name) == 0);
+}
+
+3. 与platform总线所关联的设备对象为
+
+struct platform_device {
+	const char	* name; //设备的名字 --> /sys/bus/platform/devices/
+	int		id; //设备的id号，如果多个name相同，那么id必须不一样
+	struct device	dev; //驱动模型的基本设备类型
+	u32		num_resources;
+	struct resource	* resource; //用于指向一个数组，数组元素个数决定于num_resources
+
+	const struct platform_device_id	*id_entry;
+
+	/* MFD cell pointer */
+	struct mfd_cell *mfd_cell;
+
+	/* arch specific additions */
+	struct pdev_archdata	archdata;
+};
+
+platform_device_register();/platform_device_unregister();
+
+
+4. 与platform总线关联的驱动对象为
+
+struct platform_driver {
+	int (*probe)(struct platform_device *);
+	int (*remove)(struct platform_device *);
+	void (*shutdown)(struct platform_device *);
+	int (*suspend)(struct platform_device *, pm_message_t state);
+	int (*resume)(struct platform_device *);
+	struct device_driver driver;
+	const struct platform_device_id *id_table;
+};
+
+platform_driver_register/platform_driver_unregister;
