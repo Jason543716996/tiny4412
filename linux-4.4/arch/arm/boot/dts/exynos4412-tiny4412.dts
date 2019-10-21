@@ -80,6 +80,14 @@
 		clocks = <&clock CLK_PWM>;
 		clock-names = "timers";
 	};
+	lcd_s702@11C00000 {
+		compatible = "tiny4412, lcd_s702";
+		reg = <0x11C00000  0x20c0 0x10010210 0x08 0x10023c80 0x04 0x1003c000 0x1000>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&lcd_s702>;
+		clocks = <&clock CLK_FIMD0 &clock CLK_ACLK160>;
+		clock-names = "fimd0","aclk160";
+	};
 
 	usb-hub {
 		compatible = "smsc,usb4640";
@@ -132,7 +140,19 @@ mmc_reg: regulator@0{
 	bus-width = <8>;
 	cap-mmc-highspeed;
 };
-
+&pinctrl_0 {
+lcd_s702:lcd {
+		 samsung,pins = "gpf0-0", "gpf0-1", "gpf0-2", "gpf0-3", "gpf0-4",
+			 "gpf0-5", "gpf0-6","gpf0-7", "gpf1-0", "gpf1-1",
+			 "gpf1-2", "gpf1-3", "gpf1-4", "gpf1-5", "gpf1-6",
+			 "gpf1-7", "gpf2-0", "gpf2-1", "gpf2-2", "gpf2-3", 
+			 "gpf2-4", "gpf2-5", "gpf2-6","gpf2-7", "gpf3-0",
+			 "gpf3-1", "gpf3-2", "gpf3-3";
+		 samsung,pin-function = <2>;
+		 samsung,pin-pud = <0>;
+		 samsung,pin-drv = <0>;
+	 };
+};
 &pinctrl_1 {
 backlight_out: backlight_out{
 		       samsung,pins = "gpx1-2";

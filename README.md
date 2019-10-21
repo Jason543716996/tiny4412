@@ -6,9 +6,10 @@ kernel:
 	adapter SDcard
 	adapter EMMC "配置从EMMC中启动系统"
 
-
 driver:
 	add test_driver
+	add backlight
+	add lcd
 	
 
 busybox:

@@ -1,0 +1,10 @@
+prefix=/home/jason/Desktop/board/tiny4412/driver/lcd/libjpeg-turbo-1.5.3/tmp
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libturbojpeg
+Description: A SIMD-accelerated JPEG codec that provides the TurboJPEG API
+Version: 1.5.3
+Libs: -L${libdir} -lturbojpeg
+Cflags: -I${includedir}
