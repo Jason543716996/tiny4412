@@ -69,6 +69,17 @@
 			clock-frequency = <24000000>;
 		};
 	};
+	backlight@139D0000{
+		compatible = "tiny4412,backlight";
+		reg = <0x139D0000  0x14>;
+		tiny4412,backlight = <&gpx1 2 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "backlight_out","backlight_in";
+		pinctrl-0 = <&backlight_out>;
+		pinctrl-1 = <&backlight_in>;
+		interrupts = <0 40 0>;
+		clocks = <&clock CLK_PWM>;
+		clock-names = "timers";
+	};
 
 	usb-hub {
 		compatible = "smsc,usb4640";
@@ -122,6 +133,20 @@ mmc_reg: regulator@0{
 	cap-mmc-highspeed;
 };
 
+&pinctrl_1 {
+backlight_out: backlight_out{
+		       samsung,pins = "gpx1-2";
+		       samsung,pin-function = <1>;
+		       samsung,pin-pud = <0>;
+		       samsung,pin-drv = <0>;
+	       };
+backlight_in: backlight_in{
+		      samsung,pins = "gpx1-2";
+		      samsung,pin-function = <0>;
+		      samsung,pin-pud = <0>;
+		      samsung,pin-drv = <0>;
+	      };
+};
 &serial_0 {
 	status = "okay";
 };
